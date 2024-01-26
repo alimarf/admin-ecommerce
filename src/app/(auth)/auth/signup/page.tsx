@@ -37,22 +37,20 @@ const SignUpPage: FC<SignUpPageProps> = ({}) => {
   const onSubmit = async (val: z.infer<typeof signUpFormSchema>) => {
     try {
       setIsLoading(true);
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sign-up`, {
+      await fetch("/api/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        mode: 'no-cors',
         body: JSON.stringify(val),
       });
 
       await router.push("/auth/signin");
     } catch (error) {
-      console.log('ERROR Signup', error);
       setIsLoading(false);
       toast({
         title: "Error",
         description: "Please Try Again",
       });
-
+      console.log(error);
     }
   };
 
@@ -61,7 +59,7 @@ const SignUpPage: FC<SignUpPageProps> = ({}) => {
       <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
         <div className="mb-2 text-2xl font-semibold text-center">Sign Up</div>
         <div className="text-sm text-gray-500">
-          Create your admin account to manage products
+          Create your account to search products
         </div>
 
         <Form {...form}>

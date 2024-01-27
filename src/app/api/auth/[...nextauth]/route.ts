@@ -5,6 +5,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../../../lib/prisma";
 import NextAuth from "next-auth/next";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -24,11 +26,10 @@ const authOptions: NextAuthOptions = {
         const user = await prisma.user.findFirst({
           where: {
             email: credentials?.email,
+            admin: true
           },
         });
-
-        console.log('user', user)
-
+        
         if (!user) {
           return null;
         }

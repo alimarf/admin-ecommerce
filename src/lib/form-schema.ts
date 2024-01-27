@@ -13,4 +13,5 @@ export const signUpFormSchema = z.object({
     .string({ required_error: "Email is required" })
     .email({ message: "Email is not valid" }),
   password: z.string({ required_error: "Password is required" }),
+  admin: z.boolean().default(true)
 });

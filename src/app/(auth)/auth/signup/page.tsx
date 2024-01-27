@@ -20,11 +20,11 @@ import { useForm } from "react-hook-form";
 import ClipLoader from "react-spinners/ClipLoader";
 import { z } from "zod";
 
-
 interface SignUpPageProps {}
 
 const SignUpPage: FC<SignUpPageProps> = ({}) => {
   const router = useRouter();
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
@@ -32,13 +32,12 @@ const SignUpPage: FC<SignUpPageProps> = ({}) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-
-  
   const onSubmit = async (val: z.infer<typeof signUpFormSchema>) => {
     try {
       setIsLoading(true);
-      await fetch("/api/sign-up", {
+      await fetch(`${apiUrl}/sign-up`, {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(val),
       });
@@ -113,7 +112,6 @@ const SignUpPage: FC<SignUpPageProps> = ({}) => {
               )}
             />
 
-            
             <Button className="w-full">
               {isLoading ? (
                 <ClipLoader

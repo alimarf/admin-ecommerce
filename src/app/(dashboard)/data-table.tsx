@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -51,6 +52,8 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const router = useRouter();
+
   return (
     <div>
       <div className="flex items-center py-4">
@@ -62,6 +65,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+       <Button className="ml-5" onClick={() => router.push("/product-detail/add-product")}>Add Product</Button>
       </div>
       <div className="rounded-md border">
         <Table>

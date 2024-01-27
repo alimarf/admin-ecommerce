@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -60,7 +61,8 @@ export const columns: ColumnDef<Product>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-        const router = useRouter();
+      const router = useRouter();
+      
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -70,7 +72,11 @@ export const columns: ColumnDef<Product>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => router.push("/product-detail/edit-product")}>Edit</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => router.push("/product-detail/edit-product")}
+            >
+              Edit
+            </DropdownMenuItem>
             <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

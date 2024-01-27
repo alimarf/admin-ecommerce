@@ -12,10 +12,18 @@ import {
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { Product } from "@prisma/client";
+import useSWR from "swr";
+import { fetcher } from "@/lib/utils";
 
-interface HomeProps {}
+interface ProductsPageProps {}
 
-const Home: FC<HomeProps> = ({}) => {
+const ProductsPage: FC<ProductsPageProps> = ({}) => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  const { data: productsData, error } = useSWR(`${apiUrl}/products`, fetcher);
+  
+  console.log('PRODUCTS', productsData);
+  
    const data = [
     { id: 'a',name: 'ha', description: 'had',image: 'ah', qty:20, price: 20000, rating: 5, createdAt: null },
     { id: 'b',name: 'ha1', description: 'had1',image: 'ah1', qty:30, price: 130000, rating: 5, createdAt: null },
@@ -57,4 +65,4 @@ const Home: FC<HomeProps> = ({}) => {
   );
 };
 
-export default Home;
+export default ProductsPage;

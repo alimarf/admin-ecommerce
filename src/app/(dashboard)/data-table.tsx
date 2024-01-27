@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter name of products"
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-       <Button className="ml-5" onClick={() => router.push("/product-detail/add-product")}>Add Product</Button>
+       <Button onClick={() => router.push("/product-detail/add-product")}>Add Product</Button>
       </div>
       <div className="rounded-md border">
         <Table>

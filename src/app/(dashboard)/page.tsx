@@ -7,7 +7,7 @@ interface HomeProps {
 const Home: FC<HomeProps> = ({  }) => {
   return (
     <div>
-     Home
+     Products
     </div>
   )
 }

@@ -59,7 +59,9 @@ const ProductsPage: FC<ProductsPageProps> = ({}) => {
 
     //   </Table>
     // </div>
+
     <div className="container mx-auto py-10">
+      <h1>Products</h1>
       <DataTable columns={columns} data={data} />
     </div>
   );

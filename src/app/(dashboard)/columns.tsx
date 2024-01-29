@@ -11,14 +11,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export type Product = {
   id: string;
-  name: String;
-  description: String;
+  name: string;
+  description: string;
   price: number;
   rating: number;
-  image: String;
+  image: string;
   qty: number;
 };
 
@@ -26,6 +27,14 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "image",
     header: "Image",
+    cell: ({ row }) => (
+      <Image
+        src={process.env.NEXT_PUBLIC_BASE_URL + row.original.image}
+        alt="Product Image"
+        width={40}
+        height={40}
+      />
+    ),
   },
   {
     accessorKey: "name",
@@ -62,7 +71,7 @@ export const columns: ColumnDef<Product>[] = [
     id: "actions",
     cell: ({ row }) => {
       const router = useRouter();
-      
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

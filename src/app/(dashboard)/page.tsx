@@ -20,14 +20,45 @@ interface ProductsPageProps {}
 const ProductsPage: FC<ProductsPageProps> = ({}) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  const { data: productsData, error } = useSWR(`${apiUrl}/products`, fetcher);
-  
-  console.log('PRODUCTS', productsData);
-  
-   const data = [
-    { id: 'a',name: 'ha', description: 'had',image: 'ah', qty:20, price: 20000, rating: 5, createdAt: null },
-    { id: 'b',name: 'ha1', description: 'had1',image: 'ah1', qty:30, price: 130000, rating: 5, createdAt: null },
-    { id: 'c',name: 'ha2', description: 'had2',image: 'ah2', qty:40, price: 350000, rating: 5, createdAt: null },
+  const {
+    data: productsData,
+    isLoading,
+    error,
+  } = useSWR(`${apiUrl}/products`, fetcher);
+
+  console.log("PRODUCTS", productsData);
+
+  const data = [
+    {
+      id: "a",
+      name: "ha",
+      description: "had",
+      image: "ah",
+      qty: 20,
+      price: 20000,
+      rating: 5,
+      createdAt: null,
+    },
+    {
+      id: "b",
+      name: "ha1",
+      description: "had1",
+      image: "ah1",
+      qty: 30,
+      price: 130000,
+      rating: 5,
+      createdAt: null,
+    },
+    {
+      id: "c",
+      name: "ha2",
+      description: "had2",
+      image: "ah2",
+      qty: 40,
+      price: 350000,
+      rating: 5,
+      createdAt: null,
+    },
     // Add more data as needed
   ];
 
@@ -59,8 +90,16 @@ const ProductsPage: FC<ProductsPageProps> = ({}) => {
 
     //   </Table>
     // </div>
-    <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+    <div>
+      <div className="container mx-auto py-10">
+        {error ? (
+          <p>Error loading products</p>
+        ) : !productsData || !productsData.data ? (
+          <p></p>
+        ) : (
+          <DataTable columns={columns} data={productsData.data} />
+        )}
+      </div>
     </div>
   );
 };

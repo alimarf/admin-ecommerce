@@ -73,6 +73,26 @@ export const columns: ColumnDef<Product>[] = [
       const router = useRouter();
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   
+      const handleDelete = async () => {
+        try {
+          const response = await fetch(`${apiUrl}/products/${row.original.id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.ok) {
+            console.log('Product deleted successfully');
+          } else {
+            console.error('Failed to delete product');
+          }
+        } catch (error) {
+          console.error('Error deleting product:', error);
+        }
+      };
+
+      
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -87,7 +107,7 @@ export const columns: ColumnDef<Product>[] = [
             >
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-500" onClick={handleDelete}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

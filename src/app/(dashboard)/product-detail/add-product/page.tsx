@@ -69,24 +69,17 @@ const page: FC<AddProductPageProps> = ({ }) => {
                 mode: "no-cors",
                 body: formData,
             });
+            console.log(response);
+            await router.back()
+            return;
 
-            if (response.ok) {
-              
-                await router.push("/"); // Redirect to the products page, for example
-                
-            } else {
-                toast({
-                    title: "Error",
-                    description: "Failed to add product. Please try again.",
 
-                });
-                return
-            }
         } catch (error) {
             setIsLoading(false);
             toast({
                 title: "Error",
                 description: "An unexpected error occurred. Please try again.",
+
             });
             console.error(error);
         }
@@ -147,6 +140,20 @@ const page: FC<AddProductPageProps> = ({ }) => {
                         )}
                     />
 
+                    {/* <FormField
+                        control={form.control}
+                        name="rating"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Rating</FormLabel>
+                                <FormControl>
+                                    <Input type='number' placeholder="Enter rating" {...field} max={5} min={0} maxLength={1}/>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    /> */}
+
                     <FormField
                         control={form.control}
                         name="rating"
@@ -154,12 +161,28 @@ const page: FC<AddProductPageProps> = ({ }) => {
                             <FormItem>
                                 <FormLabel>Rating</FormLabel>
                                 <FormControl>
-                                    <Input type='number' placeholder="Enter rating" {...field} />
+                                    <div>
+                                        {[1, 2, 3, 4, 5].map((value) => (
+                                            <Button
+                                                key={value}
+                                                type="button"
+                                                onClick={() => field.onChange(value.toString())}
+                                                style={{
+                                                    marginRight: '5px',
+                                                    backgroundColor: field.value === value.toString() ? 'green' : 'black',
+                                                }}
+                                            >
+                                                {value}
+                                            </Button>
+                                        ))}
+                                    </div>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+
+
 
                     <FormField
                         control={form.control}

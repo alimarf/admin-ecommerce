@@ -71,7 +71,8 @@ export const columns: ColumnDef<Product>[] = [
     id: "actions",
     cell: ({ row }) => {
       const router = useRouter();
-
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

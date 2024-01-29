@@ -17,58 +17,85 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from '@/components/ui/use-toast';
 import { fromTheme } from 'tailwind-merge';
+import { log } from 'console';
 interface AddProductPageProps {
 
 }
 
+
+
 const page: FC<AddProductPageProps> = ({ }) => {
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const MAX_FILE_SIZE = 5000000;
+    const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
     const formSchema = z.object({
-        name: z.string(),
+        name: z.string({ required_error: "name required" }),
         description: z.string(),
-        price: z.number().int(),
-        rating: z.number().lt(5),
-        image: z.string(),
-        qty: z.number().int(),
+        price: z.string(),
+        rating: z.string(),
+        image: z
+            .custom<File>((v) => v instanceof File, {
+                message: 'Image is required',
+            }),
+        qty: z.string(),
 
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: "",
-            description: "",
-            price: 0,
-            rating: 0,
-            image: "",
-            qty: 0
-        }
-    })
+    });
+
 
     const [isLoading, setIsLoading] = useState(false);
-    
 
-    const onSubmit = async (values: z.infer<typeof formSchema>)  => {
+
+
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        const formData = new FormData();
+        formData.append("name", values.name);
+        formData.append("description", values.description);
+        formData.append("price", values.price);
+        formData.append("rating", values.rating);
+        formData.append("image", values.image);
+        formData.append("qty", values.qty);
+
         try {
-            setIsLoading(true)
-            await fetch (`${apiUrl}/products`, {
+            setIsLoading(true);
+            const response = await fetch(`${apiUrl}/products`, {
                 method: "POST",
-                mode:"no-cors",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(values)
-            })
+                mode: "no-cors",
+                body: formData,
+            });
 
+            if (response.ok) {
+              
+                await router.push("/"); // Redirect to the products page, for example
+                
+            } else {
+                toast({
+                    title: "Error",
+                    description: "Failed to add product. Please try again.",
+
+                });
+                return
+            }
         } catch (error) {
             setIsLoading(false);
             toast({
-              title: "Error",
-              description: "Please Try Again",
+                title: "Error",
+                description: "An unexpected error occurred. Please try again.",
             });
-            console.log(error);
+            console.error(error);
         }
-        console.log(values)
-    }
+
+        console.log(values);
+
+    };
+
+
     return (
         <div>
             <div className='mb-2'>Tambah Product</div>
@@ -113,7 +140,7 @@ const page: FC<AddProductPageProps> = ({ }) => {
                             <FormItem>
                                 <FormLabel>Price</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Enter price" {...field} />
+                                    <Input type='number' placeholder="Enter price" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -127,7 +154,7 @@ const page: FC<AddProductPageProps> = ({ }) => {
                             <FormItem>
                                 <FormLabel>Rating</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Enter rating" {...field} />
+                                    <Input type='number' placeholder="Enter rating" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -137,16 +164,21 @@ const page: FC<AddProductPageProps> = ({ }) => {
                     <FormField
                         control={form.control}
                         name="image"
-                        render={({ field }) => (
+                        render={({ field: { ref, name, onBlur, onChange } }) => (
                             <FormItem>
                                 <FormLabel>Select Image</FormLabel>
                                 <FormControl>
-                                    <Input type='file' placeholder="Select image" {...field} />
+                                    <Input type='file' placeholder="Select image" onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        onChange(e.target.files?.[0]);
+                                        //setImagePreview(file ? URL.createObjectURL(file) : null);
+                                    }} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+
 
                     <FormField
                         control={form.control}
@@ -155,7 +187,7 @@ const page: FC<AddProductPageProps> = ({ }) => {
                             <FormItem>
                                 <FormLabel>Quantity</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Enter rating" {...field} />
+                                    <Input type='number' placeholder="Enter Quantity" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
